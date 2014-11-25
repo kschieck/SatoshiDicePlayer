@@ -119,8 +119,9 @@ public class PlayActivity extends Activity {
             final Context context = this;
             player = new Player(secret, balance, new Martingale(), new Player.Callback() {
                 @Override
-                public void onJsonException(JSONException e) {
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                public void onJsonException(JSONException jsone) {
+                    jsone.printStackTrace();
+                    Toast.makeText(context, jsone.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 @Override

@@ -35,7 +35,7 @@ public class Player {
 
     public interface Callback {
 
-        public abstract void onJsonException(JSONException e);
+        public abstract void onJsonException(JSONException jsone);
         public abstract void onStartPlaying();
         public abstract void onStopPlaying();
         public abstract void onBetFailed(BetResult betResult);
@@ -91,7 +91,6 @@ public class Player {
                             try {
                                 handleBetResult(new BetResult(response));
                             } catch (JSONException jsone) {
-                                jsone.printStackTrace();
                                 callback.onJsonException(jsone);
                             }
                         }
@@ -104,7 +103,6 @@ public class Player {
                             try {
                                 handleBetResult(new BetResult(errorResponse));
                             } catch (JSONException jsone) {
-                                jsone.printStackTrace();
                                 callback.onJsonException(jsone);
                             }
                         }
@@ -113,8 +111,8 @@ public class Player {
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Log.d(TAG, "Failure(string): " + responseString);
                             betActive = false;
-                            setPlaying(false);
-                            callback.onServerResponseFail(responseString);
+
+                            handleOnFailure(responseString);
                         }
 
                     });
@@ -129,13 +127,12 @@ public class Player {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Log.d(TAG, "Success(JsonObject): " + response.toString());
+                            betActive = false;
 
                             try {
                                 currentSession = new Round(response);
-                                betActive = false;
                                 continuePlaying();
                             } catch (JSONException jsone) {
-                                jsone.printStackTrace();
                                 callback.onJsonException(jsone);
                             }
                         }
@@ -144,12 +141,23 @@ public class Player {
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Log.d(TAG, "Failure(String): " + responseString);
                             betActive = false;
-                            callback.onServerResponseFail(responseString);
+
+                            handleOnFailure(responseString);
                         }
 
                     });
 
         }
+    }
+
+    /**
+     * Call when server response is failure (eg "Invalid Account")
+     *
+     * @param responseString the string returned by the server
+     */
+    private void handleOnFailure(String responseString) {
+        setPlaying(false);
+        callback.onServerResponseFail(responseString);
     }
 
     /**
