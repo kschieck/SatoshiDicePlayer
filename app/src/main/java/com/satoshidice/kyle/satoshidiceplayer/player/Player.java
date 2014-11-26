@@ -73,10 +73,16 @@ public class Player {
         // Round is required to bet
         if (currentSession != null) {
 
+            long betInSatoshis = betSystem.getBet();
+            if (betInSatoshis <= 0) {
+                setPlaying(false);
+                return;
+            }
+
             // Place bet
             ApiAdapter.placeBet(
                     secret,
-                    betSystem.getBet(),
+                    betInSatoshis,
                     currentSession.getId(),
                     currentSession.getHash(),
                     CLIENT_ROLL,
