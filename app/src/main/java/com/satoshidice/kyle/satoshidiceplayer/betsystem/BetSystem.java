@@ -8,15 +8,15 @@ import com.satoshidice.kyle.satoshidiceplayer.http.api.Bet;
  */
 public abstract class BetSystem {
 
-    protected static final long MIN_BET_SATOSHIS = 100;
-    protected long betInSatoshis = MIN_BET_SATOSHIS; // current bet amount
+    protected static final int BELOW_FOR_2X = 32145;
+    public static final long MIN_BET_SATOSHIS = 100;
 
     public abstract void handleBetOutcome(Bet bet);
 
-    public abstract int getLessThan();
-
-    public long getBet() {
-        return betInSatoshis;
+    public int getLessThan() {
+        return BELOW_FOR_2X;
     }
+
+    public abstract long getBet();
 
 }

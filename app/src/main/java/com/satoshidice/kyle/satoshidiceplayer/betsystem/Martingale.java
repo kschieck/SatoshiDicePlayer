@@ -8,7 +8,7 @@ import com.satoshidice.kyle.satoshidiceplayer.http.api.Bet;
  */
 public class Martingale extends BetSystem {
 
-    private static final int BELOW_FOR_2X = 32145;
+    protected long betInSatoshis = MIN_BET_SATOSHIS; // current bet amount
 
     @Override
     public void handleBetOutcome(Bet bet) {
@@ -26,8 +26,8 @@ public class Martingale extends BetSystem {
     }
 
     @Override
-    public int getLessThan() {
-        return BELOW_FOR_2X;
+    public long getBet() {
+        return betInSatoshis;
     }
 
 }
