@@ -8,7 +8,17 @@ import com.satoshidice.kyle.satoshidiceplayer.http.api.Bet;
  */
 public class Martingale extends BetSystem {
 
-    protected long betInSatoshis = MIN_BET_SATOSHIS; // current bet amount
+    protected long minBetInSatoshis = MIN_BET_SATOSHIS;
+    protected long betInSatoshis; // current bet amount
+
+    public Martingale() {
+        betInSatoshis = this.minBetInSatoshis;
+    }
+
+    public Martingale(long minBetInSatoshis) {
+        this.minBetInSatoshis = minBetInSatoshis;
+        betInSatoshis = minBetInSatoshis;
+    }
 
     @Override
     public void handleBetOutcome(Bet bet) {
@@ -18,7 +28,7 @@ public class Martingale extends BetSystem {
         }
 
         if (bet.getPayoutInSatoshis() > 0) {
-            betInSatoshis = MIN_BET_SATOSHIS;
+            betInSatoshis = minBetInSatoshis;
         } else {
             betInSatoshis *= 2;
         }
