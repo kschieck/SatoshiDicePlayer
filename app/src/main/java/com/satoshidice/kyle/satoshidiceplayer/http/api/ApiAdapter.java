@@ -65,6 +65,53 @@ public class ApiAdapter extends HttpUtil {
         get(url, responseHandler);
     }
 
+    /**
+     * Create a new account on the server, receive secret as response
+     *
+     * @see <a href="https://satoshidice.com/api/#get-user-secret">satoshidice.com/api/#get-user-secret</a>
+     * @param responseHandler Callback interface
+     */
+    public static void addUser(JsonHttpResponseHandler responseHandler) {
+
+        String url = "/adduser";
+
+        get(url, responseHandler);
+    }
+
+    /**
+     * Get the bitcoin deposit address for a user
+     *
+     * @see <a href="https://satoshidice.com/api/#get-deposit-address">satoshidice.com/api/#get-deposit-address</a>
+     * @param secret Account secret identifier
+     * @param responseHandler Callback interface
+     */
+    public static void getDepositAddress(String secret,
+                                         JsonHttpResponseHandler responseHandler) {
+
+        String url = "/useraddress/?secret=" + secret;
+
+        get(url, responseHandler);
+    }
+
+    /**
+     * Withdraw funds from SatoshiDice account
+     *
+     * @see <a href="https://satoshidice.com/api/#withdraw-funds">satoshidice.com/api/#withdraw-funds</a>
+     * @param secret Account secret identifier
+     * @param bitcoinAddress Bitcoin address to send Bitcoin to
+     * @param amountInSatoshis Amount to withdraw (includes transaction fee ฿0.0001)
+     */
+    public static void withdrawFunds(String secret,
+                                     String bitcoinAddress,
+                                     long amountInSatoshis) {
+
+        double amountInBitcoin = amountInSatoshis * 0.00000001d; // 1 Satoshi = 0.00000001 ฿
+
+        String url = "/withdraw/?secret=" + secret +
+                "&address=" + bitcoinAddress +
+                "&amount=" + amountInBitcoin;
+    }
+
 }
 
 /*
