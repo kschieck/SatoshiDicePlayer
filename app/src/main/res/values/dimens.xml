@@ -4,5 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">35sp</dimen>
+    <dimen name="list_divider_height">10dp</dimen>
 
 </resources>

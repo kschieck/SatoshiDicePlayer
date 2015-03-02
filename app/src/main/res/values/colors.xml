@@ -3,5 +3,7 @@
 
     <color name="win_green">#66FF99</color>
     <color name="lose_red">#FF6666</color>
+    <color name="error">#DC143C</color>
+    <color name="default_grey">#bbb</color>
 
 </resources>

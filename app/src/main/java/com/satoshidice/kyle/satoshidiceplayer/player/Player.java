@@ -38,6 +38,7 @@ public class Player {
         public abstract void onJsonException(JSONException jsone);
         public abstract void onStartPlaying();
         public abstract void onStopPlaying();
+        public abstract void onBetPlaced(long betInSatoshis);
         public abstract void onBetFailed(BetResult betResult);
         public abstract void onBetSucceeded(BetResult betResult);
         public abstract void onServerResponseFail(String responseString);
@@ -78,6 +79,8 @@ public class Player {
                 setPlaying(false);
                 return;
             }
+
+            callback.onBetPlaced(betInSatoshis);
 
             // Place bet
             ApiAdapter.placeBet(
