@@ -58,7 +58,6 @@ public class LoginActivity extends Activity {
 
                 // Success!
                 try {
-                    Toast.makeText(context, "Response Received (" + response.getDouble("queryTimeInSeconds") + ")", Toast.LENGTH_LONG).show();
 
                     try {
                         FileAdapter.saveFileData(context, secret, SECRET_FILENAME);
@@ -72,6 +71,7 @@ public class LoginActivity extends Activity {
                     intent.putExtra("balance", response.getLong("balanceInSatoshis"));
                     intent.putExtra("hash", response.getString("hash"));
                     intent.putExtra("max_profit", response.getLong("maxProfitInSatoshis"));
+                    intent.putExtra("latency", response.getDouble("queryTimeInSeconds"));
                     startActivity(intent);
 
                 } catch (JSONException jsone) {

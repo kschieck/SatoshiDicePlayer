@@ -19,6 +19,7 @@ import com.satoshidice.kyle.satoshidiceplayer.player.Player;
 
 import org.json.JSONException;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +34,8 @@ public class PlayActivity extends Activity {
 
     private int wins = 0;
     private int losses = 0;
+
+    private String name;
 
     // Controls
     private TextView balanceText;
@@ -50,6 +53,8 @@ public class PlayActivity extends Activity {
 
     private ArrayList<Bet> bets = new ArrayList<Bet>();
     BetArrayAdapter adapter;
+
+    DecimalFormat df = new DecimalFormat("0.000");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,17 @@ public class PlayActivity extends Activity {
         nextBet.setVisibility(View.GONE);
     }
 
+    protected void displayLatency(double latency) {
+
+        String title = name;
+
+        if (latency > 0d) {
+            title += " (" + df.format(latency) + "ms)";
+        }
+
+        setTitle(title);
+    }
+
     Player.Callback callback = new Player.Callback() {
         @Override
         public void onJsonException(JSONException e) {
@@ -130,6 +146,7 @@ public class PlayActivity extends Activity {
             Bet bet = betResult.getBet();
 
             hideBet();
+            displayLatency(betResult.getQueryTimeInSeconds());
 
             //Update bet feed
             bets.add(0, bet);
@@ -168,6 +185,7 @@ public class PlayActivity extends Activity {
         long balance = intent.getLongExtra("balance", -1);
         String hash = intent.getStringExtra("hash");
         long maxProfit = intent.getLongExtra("max_profit", -1);
+        double latency = intent.getDoubleExtra("latency", 0d);
 
         if (secret == null ||
                 name == null ||
@@ -201,8 +219,10 @@ public class PlayActivity extends Activity {
         } else {
 
             // Set title and balance
-            setTitle(name);
+            this.name = name;
             balanceText.setText(Long.toString(balance));
+
+            displayLatency(latency);
 
             // Setup list adapter
             adapter = new BetArrayAdapter(this, R.layout.listitem_bet_result, bets);
