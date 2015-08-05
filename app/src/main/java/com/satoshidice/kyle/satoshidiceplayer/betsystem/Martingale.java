@@ -8,36 +8,34 @@ import com.satoshidice.kyle.satoshidiceplayer.http.api.Bet;
  */
 public class Martingale extends BetSystem {
 
-    protected long minBetInSatoshis = MIN_BET_SATOSHIS;
-    protected long betInSatoshis; // current bet amount
+    long minBetInSatoshis;
 
     public Martingale() {
-        betInSatoshis = this.minBetInSatoshis;
+        init(MIN_BET_SATOSHIS);
     }
 
     public Martingale(long minBetInSatoshis) {
+        init(minBetInSatoshis);
+    }
+
+    private void init(long minBetInSatoshis) {
         this.minBetInSatoshis = minBetInSatoshis;
         betInSatoshis = minBetInSatoshis;
     }
 
     @Override
-    public void handleBetOutcome(Bet bet) {
-
-        if (bet.getBetInSatoshis() != betInSatoshis) {
-            throw new IllegalStateException("Current bet doesn't match response from server");
-        }
-
-        if (bet.getPayoutInSatoshis() > 0) {
-            betInSatoshis = minBetInSatoshis;
-        } else {
-            betInSatoshis *= 2;
-        }
-
+    public void handleWin(Bet bet) {
+        betInSatoshis = minBetInSatoshis;
     }
 
     @Override
-    public long getBet() {
-        return betInSatoshis;
+    public void handleLoss(Bet bet) {
+        betInSatoshis *= 2;
     }
 
+    @Override
+    public int getLessThan() {
+        return LT_PERCENT_50;
+    }
+    
 }

@@ -35,13 +35,13 @@ public class Player {
 
     public interface Callback {
 
-        public abstract void onJsonException(JSONException jsone);
-        public abstract void onStartPlaying();
-        public abstract void onStopPlaying();
-        public abstract void onBetPlaced(long betInSatoshis);
-        public abstract void onBetFailed(BetResult betResult);
-        public abstract void onBetSucceeded(BetResult betResult);
-        public abstract void onServerResponseFail(String responseString);
+        void onJsonException(JSONException jsone);
+        void onStartPlaying();
+        void onStopPlaying();
+        void onBetPlaced(long betInSatoshis);
+        void onBetFailed(BetResult betResult);
+        void onBetSucceeded(BetResult betResult);
+        void onServerResponseFail(String responseString);
 
     }
 
@@ -74,7 +74,8 @@ public class Player {
         // Round is required to bet
         if (currentSession != null) {
 
-            long betInSatoshis = betSystem.getBet();
+            long betInSatoshis = Math.min(betSystem.getBet(), balance);
+            betSystem.overrideBetAmount(betInSatoshis);
             if (betInSatoshis <= 0) {
                 setPlaying(false);
                 return;
